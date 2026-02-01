@@ -1,9 +1,10 @@
-<DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
 <title>For My Liya ❤️</title>
 
 <style>
+
 body{
  background:linear-gradient(to right,#1f1c2c,#928dab);
  font-family:Arial,sans-serif;
@@ -53,6 +54,7 @@ body{
  cursor:pointer;
 }
 
+/* Buttons */
 button{
  width:100%;
  padding:12px;
@@ -88,8 +90,6 @@ button:hover{background:#ddd;}
  100%{transform:translateX(0);}
 }
 
-#wrongScreen h1{font-size:55px}
-
 /* Confetti */
 .confetti{
  position:fixed;
@@ -107,7 +107,7 @@ button:hover{background:#ddd;}
  }
 }
 
-/* Mini Game */
+/* Game */
 #gameArea{display:none;margin-top:15px;}
 
 .heart{
@@ -122,26 +122,11 @@ button:hover{background:#ddd;}
  to{top:100vh;}
 }
 
-/* Slideshow */
-#slideshow{display:none;margin-top:15px;}
-
-#slideshow img{
- width:100%;
- border-radius:15px;
- box-shadow:0 0 15px rgba(0,0,0,0.4);
-}
-
-#caption{
- margin-top:8px;
- color:#ff1493;
- font-weight:bold;
-}
-
 /* Letter */
 #letter{
  display:none;
  font-size:14px;
- line-height:1.6;
+ line-height:1.7;
  margin-top:15px;
  color:#333;
 }
@@ -149,8 +134,9 @@ button:hover{background:#ddd;}
 #softMsg{
  color:#ff1493;
  font-weight:bold;
- min-height:20px;
+ min-height:22px;
 }
+
 </style>
 </head>
 
@@ -159,7 +145,10 @@ button:hover{background:#ddd;}
 <!-- INTRO -->
 <div id="intro">
 <h2>💖 Something Special For You, Liya 💖</h2>
-<p>From my side, with all my heart 😌✨<br>Please play till the end 🥺💞</p>
+<p>
+From my side, with all my heart 😌✨<br>
+Please play till the end 🥺💞
+</p>
 <button id="startBtn">Start 💝</button>
 </div>
 
@@ -173,7 +162,7 @@ button:hover{background:#ddd;}
 <!-- MAIN -->
 <div class="box" id="mainBox">
 
-<h3 id="score">Score: 0/8</h3>
+<h3 id="score">Score: 0/7</h3>
 
 <h2 id="question"></h2>
 
@@ -187,12 +176,6 @@ button:hover{background:#ddd;}
 <p>Hearts: <span id="hearts">0</span>/5</p>
 </div>
 
-<!-- SLIDES -->
-<div id="slideshow">
-<img id="slideImg">
-<div id="caption"></div>
-</div>
-
 <!-- LETTER -->
 <div id="letter"></div>
 
@@ -200,21 +183,8 @@ button:hover{background:#ddd;}
 
 <script>
 
-/* PHOTOS */
-const photos=[
-"https://drive.google.com/uc?export=view&id=1jj807Kh9RZQUObAxv6Mrr-eiu43-3nbV",
-"https://drive.google.com/uc?export=view&id=1pGxQtps0yOiIpZRx_4JtA38HviJ5DzvV",
-"https://drive.google.com/uc?export=view&id=1fKhn5xuwnGZuHBJ18UO5z8Ih76KGnKhh"
-];
-
-const captions=[
-"One of my favourite memories ❤️",
-"My comfort person 😌💞",
-"Always grateful for you 💖"
-];
-
 /* DATA */
-let score=0,current=0,heartCount=0,gameStarted=false,slideIndex=0;
+let score=0,current=0,heartCount=0,gameStarted=false;
 
 /* START */
 document.getElementById("startBtn").onclick=()=>{
@@ -223,7 +193,7 @@ document.getElementById("startBtn").onclick=()=>{
  loadQuestion();
 };
 
-/* MESSAGES */
+/* Messages */
 const angry=[
 "YOU DON’T LIKE ME 😭💔",
 "HOW COULD YOU 😢",
@@ -239,21 +209,20 @@ const soft=[
 "Thoda aur socho 😅💗"
 ];
 
-/* QUESTIONS */
+/* Questions */
 const quiz=[
 
 {q:"How did we meet? 😌",o:["Online","Friends","Destiny","Forgot"],a:0,s:[2]},
 {q:"When you liked talking to me? 💞",o:["Day1","Later","Idk","Never"],a:1,s:[0]},
 {q:"When I became special? 🥺",o:["Start","Night talks","Laughs","No idea"],a:1,s:[2]},
 {q:"What do you like most? 😍",o:["Care","Jokes","Attitude","Everything"],a:3,s:[0,1]},
-{q:"When do you miss me? 💗",o:["Night","Always","Busy","Never"],a:1,s:[0]},
 {q:"How much I like you? 😏",o:["Little","Lot","Too much","Zero"],a:2,s:[1]},
 {q:"What are we? 😌",o:["Friends","Special","Confused","Destined"],a:1,s:[3]},
 {q:"Be my Valentine? 💌",o:["Yes","Yes😍","Kiss😘","Obviously💞"],a:3,s:[1,2]}
 
 ];
 
-/* LOAD */
+/* Load */
 function loadQuestion(){
 
  document.getElementById("softMsg").innerHTML="";
@@ -268,7 +237,7 @@ function loadQuestion(){
  document.getElementById("options").innerHTML=h;
 }
 
-/* CONFETTI */
+/* Confetti */
 function confetti(n=40){
 
  for(let i=0;i<n;i++){
@@ -287,7 +256,7 @@ function confetti(n=40){
  }
 }
 
-/* CHECK */
+/* Check */
 function check(i){
 
  const q=quiz[current];
@@ -298,7 +267,7 @@ function check(i){
   confetti(60);
 
   document.getElementById("score").innerHTML=
-  "Score: "+score+"/8";
+  "Score: "+score+"/7";
 
   current++;
 
@@ -319,7 +288,7 @@ function check(i){
  else showWrong();
 }
 
-/* WRONG */
+/* Wrong */
 function showWrong(){
 
  document.getElementById("wrongText").innerHTML=
@@ -334,7 +303,7 @@ function closeWrong(){
  document.getElementById("wrongScreen").style.display="none";
 }
 
-/* GAME */
+/* Game */
 function startGame(){
 
  document.getElementById("question").innerHTML="Final Game 😏🎮";
@@ -364,7 +333,7 @@ function createHeart(){
 
   document.getElementById("hearts").innerHTML=heartCount;
 
-  if(heartCount>=5) showSlides();
+  if(heartCount>=5) showLetter();
  };
 
  document.body.appendChild(h);
@@ -374,34 +343,10 @@ function createHeart(){
  },4000);
 }
 
-/* SLIDES */
-function showSlides(){
-
- document.getElementById("gameArea").style.display="none";
- document.getElementById("slideshow").style.display="block";
-
- playSlides();
-}
-
-function playSlides(){
-
- if(slideIndex>=photos.length){
-  showLetter();
-  return;
- }
-
- document.getElementById("slideImg").src=photos[slideIndex];
- document.getElementById("caption").innerHTML=captions[slideIndex];
-
- slideIndex++;
-
- setTimeout(playSlides,3000);
-}
-
-/* LETTER */
+/* Letter */
 function showLetter(){
 
- document.getElementById("slideshow").style.display="none";
+ document.getElementById("gameArea").style.display="none";
 
  confetti(120);
 
@@ -412,19 +357,29 @@ function showLetter(){
 
  "💌 Liya…<br><br>"+
 
- "I know you’ve been feeling low lately 🥺❤️<br><br>"+
+ "I know lately you’ve been feeling low, tired, and maybe a little lost sometimes 🥺❤️<br><br>"+
 
- "I wish I could be there with you right now… but even from far, I’m always with you 😌✨<br><br>"+
+ "And it hurts me that I can’t be there physically to hold your hand, sit beside you, or just hug you when you need it the most 😔💞<br><br>"+
 
- "You don’t have to be strong every day. I’m proud of you 💞<br><br>"+
+ "But even from miles away, my heart is always with you. Every day, every night, every moment 😌✨<br><br>"+
 
- "No matter what, you have me. Always 🤗💖";
+ "Some days are heavy. Some days you don’t feel like smiling. And that’s okay. You don’t have to pretend to be strong for anyone 💗<br><br>"+
+
+ "With me, you can be tired. You can be sad. You can be quiet. I’ll still choose you. Always ❤️<br><br>"+
+
+ "I’m proud of you for surviving every day. For trying. For not giving up. For being you 💖<br><br>"+
+
+ "No matter how far we are, remember this: you are never alone. You have me. Today. Tomorrow. Always 🤗💞<br><br>"+
+
+ "This is my hug for you… until I can give you one in real life 😘❤️";
+
 }
 
 </script>
 
 </body>
 </html>
+
 
 
 
