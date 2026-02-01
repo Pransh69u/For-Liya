@@ -1,0 +1,432 @@
+<DOCTYPE html>
+<html>
+<head>
+<title>For My Liya ❤️</title>
+
+<style>
+body{
+ background:linear-gradient(to right,#1f1c2c,#928dab);
+ font-family:Arial,sans-serif;
+ text-align:center;
+ color:white;
+ padding-top:25px;
+ overflow:hidden;
+}
+
+.box{
+ background:white;
+ color:black;
+ width:360px;
+ margin:auto;
+ padding:22px;
+ border-radius:20px;
+ box-shadow:0 0 25px rgba(255,105,180,0.6);
+ display:none;
+ position:relative;
+ z-index:2;
+}
+
+/* Intro */
+#intro{
+ background:linear-gradient(to right,#ff758c,#ff7eb3);
+ width:360px;
+ margin:auto;
+ padding:28px 20px;
+ border-radius:20px;
+ box-shadow:0 0 25px rgba(255,20,147,0.8);
+ animation:glow 2s infinite alternate;
+}
+
+@keyframes glow{
+ from{box-shadow:0 0 15px #ff69b4;}
+ to{box-shadow:0 0 30px #ff1493;}
+}
+
+#startBtn{
+ background:white;
+ color:#ff1493;
+ font-weight:bold;
+ border:none;
+ padding:12px 28px;
+ border-radius:25px;
+ font-size:16px;
+ cursor:pointer;
+}
+
+button{
+ width:100%;
+ padding:12px;
+ margin:6px 0;
+ border:none;
+ border-radius:10px;
+ font-size:15px;
+ cursor:pointer;
+ background:#f1f1f1;
+}
+
+button:hover{background:#ddd;}
+
+/* Wrong Screen */
+#wrongScreen{
+ display:none;
+ position:fixed;
+ inset:0;
+ background:rgba(0,0,0,0.95);
+ z-index:50;
+ color:white;
+ align-items:center;
+ justify-content:center;
+ flex-direction:column;
+ animation:shake .4s infinite;
+}
+
+@keyframes shake{
+ 0%{transform:translateX(0);}
+ 25%{transform:translateX(-8px);}
+ 50%{transform:translateX(8px);}
+ 75%{transform:translateX(-8px);}
+ 100%{transform:translateX(0);}
+}
+
+#wrongScreen h1{font-size:55px}
+
+/* Confetti */
+.confetti{
+ position:fixed;
+ top:-10px;
+ font-size:22px;
+ animation:confettiFall 2.5s linear forwards;
+ pointer-events:none;
+ z-index:60;
+}
+
+@keyframes confettiFall{
+ to{
+  transform:translateY(100vh) rotate(360deg);
+  opacity:0;
+ }
+}
+
+/* Mini Game */
+#gameArea{display:none;margin-top:15px;}
+
+.heart{
+ position:absolute;
+ font-size:28px;
+ cursor:pointer;
+ animation:fall 4s linear;
+}
+
+@keyframes fall{
+ from{top:-40px;}
+ to{top:100vh;}
+}
+
+/* Slideshow */
+#slideshow{display:none;margin-top:15px;}
+
+#slideshow img{
+ width:100%;
+ border-radius:15px;
+ box-shadow:0 0 15px rgba(0,0,0,0.4);
+}
+
+#caption{
+ margin-top:8px;
+ color:#ff1493;
+ font-weight:bold;
+}
+
+/* Letter */
+#letter{
+ display:none;
+ font-size:14px;
+ line-height:1.6;
+ margin-top:15px;
+ color:#333;
+}
+
+#softMsg{
+ color:#ff1493;
+ font-weight:bold;
+ min-height:20px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- INTRO -->
+<div id="intro">
+<h2>💖 Something Special For You, Liya 💖</h2>
+<p>From my side, with all my heart 😌✨<br>Please play till the end 🥺💞</p>
+<button id="startBtn">Start 💝</button>
+</div>
+
+<!-- WRONG -->
+<div id="wrongScreen" onclick="closeWrong()">
+<h1>😡😭💔</h1>
+<p id="wrongText"></p>
+<p>Tap to try again 😤</p>
+</div>
+
+<!-- MAIN -->
+<div class="box" id="mainBox">
+
+<h3 id="score">Score: 0/8</h3>
+
+<h2 id="question"></h2>
+
+<div id="softMsg"></div>
+
+<div id="options"></div>
+
+<!-- GAME -->
+<div id="gameArea">
+<h3>Catch My Hearts 💕</h3>
+<p>Hearts: <span id="hearts">0</span>/5</p>
+</div>
+
+<!-- SLIDES -->
+<div id="slideshow">
+<img id="slideImg">
+<div id="caption"></div>
+</div>
+
+<!-- LETTER -->
+<div id="letter"></div>
+
+</div>
+
+<script>
+
+/* PHOTOS */
+const photos=[
+"https://drive.google.com/uc?export=view&id=1jj807Kh9RZQUObAxv6Mrr-eiu43-3nbV",
+"https://drive.google.com/uc?export=view&id=1pGxQtps0yOiIpZRx_4JtA38HviJ5DzvV",
+"https://drive.google.com/uc?export=view&id=1fKhn5xuwnGZuHBJ18UO5z8Ih76KGnKhh"
+];
+
+const captions=[
+"One of my favourite memories ❤️",
+"My comfort person 😌💞",
+"Always grateful for you 💖"
+];
+
+/* DATA */
+let score=0,current=0,heartCount=0,gameStarted=false,slideIndex=0;
+
+/* START */
+document.getElementById("startBtn").onclick=()=>{
+ document.getElementById("intro").style.display="none";
+ document.getElementById("mainBox").style.display="block";
+ loadQuestion();
+};
+
+/* MESSAGES */
+const angry=[
+"YOU DON’T LIKE ME 😭💔",
+"HOW COULD YOU 😢",
+"MY HEART BROKE 💔😭",
+"BABY THINK AGAIN 😡💞",
+"THIS HURT 😤"
+];
+
+const soft=[
+"Almost right 😏💞 Try again",
+"So close 😌❤️",
+"Think again baby 😘",
+"Thoda aur socho 😅💗"
+];
+
+/* QUESTIONS */
+const quiz=[
+
+{q:"How did we meet? 😌",o:["Online","Friends","Destiny","Forgot"],a:0,s:[2]},
+{q:"When you liked talking to me? 💞",o:["Day1","Later","Idk","Never"],a:1,s:[0]},
+{q:"When I became special? 🥺",o:["Start","Night talks","Laughs","No idea"],a:1,s:[2]},
+{q:"What do you like most? 😍",o:["Care","Jokes","Attitude","Everything"],a:3,s:[0,1]},
+{q:"When do you miss me? 💗",o:["Night","Always","Busy","Never"],a:1,s:[0]},
+{q:"How much I like you? 😏",o:["Little","Lot","Too much","Zero"],a:2,s:[1]},
+{q:"What are we? 😌",o:["Friends","Special","Confused","Destined"],a:1,s:[3]},
+{q:"Be my Valentine? 💌",o:["Yes","Yes😍","Kiss😘","Obviously💞"],a:3,s:[1,2]}
+
+];
+
+/* LOAD */
+function loadQuestion(){
+
+ document.getElementById("softMsg").innerHTML="";
+
+ document.getElementById("question").innerHTML=quiz[current].q;
+
+ let h="";
+ quiz[current].o.forEach((x,i)=>{
+  h+=`<button onclick="check(${i})">${x}</button>`;
+ });
+
+ document.getElementById("options").innerHTML=h;
+}
+
+/* CONFETTI */
+function confetti(n=40){
+
+ for(let i=0;i<n;i++){
+
+  const c=document.createElement("div");
+  c.className="confetti";
+
+  const e=["🎉","💖","✨","💝","🌸","🎆"];
+  c.innerHTML=e[Math.floor(Math.random()*e.length)];
+
+  c.style.left=Math.random()*100+"vw";
+
+  document.body.appendChild(c);
+
+  setTimeout(()=>c.remove(),2500);
+ }
+}
+
+/* CHECK */
+function check(i){
+
+ const q=quiz[current];
+
+ if(i===q.a){
+
+  score++;
+  confetti(60);
+
+  document.getElementById("score").innerHTML=
+  "Score: "+score+"/8";
+
+  current++;
+
+  setTimeout(()=>{
+   if(current<quiz.length) loadQuestion();
+   else startGame();
+  },700);
+
+ }
+
+ else if(q.s.includes(i)){
+
+  document.getElementById("softMsg").innerHTML=
+  soft[Math.floor(Math.random()*soft.length)];
+
+ }
+
+ else showWrong();
+}
+
+/* WRONG */
+function showWrong(){
+
+ document.getElementById("wrongText").innerHTML=
+ angry[Math.floor(Math.random()*angry.length)];
+
+ document.getElementById("wrongScreen").style.display="flex";
+
+ if(navigator.vibrate) navigator.vibrate([200,100,200]);
+}
+
+function closeWrong(){
+ document.getElementById("wrongScreen").style.display="none";
+}
+
+/* GAME */
+function startGame(){
+
+ document.getElementById("question").innerHTML="Final Game 😏🎮";
+ document.getElementById("options").innerHTML="";
+ document.getElementById("gameArea").style.display="block";
+
+ if(!gameStarted){
+  gameStarted=true;
+  setInterval(createHeart,900);
+ }
+}
+
+function createHeart(){
+
+ if(heartCount>=5) return;
+
+ const h=document.createElement("div");
+ h.className="heart";
+ h.innerHTML="💖";
+
+ h.style.left=Math.random()*90+"%";
+
+ h.onclick=()=>{
+
+  h.remove();
+  heartCount++;
+
+  document.getElementById("hearts").innerHTML=heartCount;
+
+  if(heartCount>=5) showSlides();
+ };
+
+ document.body.appendChild(h);
+
+ setTimeout(()=>{
+  if(h.parentNode)h.remove();
+ },4000);
+}
+
+/* SLIDES */
+function showSlides(){
+
+ document.getElementById("gameArea").style.display="none";
+ document.getElementById("slideshow").style.display="block";
+
+ playSlides();
+}
+
+function playSlides(){
+
+ if(slideIndex>=photos.length){
+  showLetter();
+  return;
+ }
+
+ document.getElementById("slideImg").src=photos[slideIndex];
+ document.getElementById("caption").innerHTML=captions[slideIndex];
+
+ slideIndex++;
+
+ setTimeout(playSlides,3000);
+}
+
+/* LETTER */
+function showLetter(){
+
+ document.getElementById("slideshow").style.display="none";
+
+ confetti(120);
+
+ const l=document.getElementById("letter");
+ l.style.display="block";
+
+ l.innerHTML=
+
+ "💌 Liya…<br><br>"+
+
+ "I know you’ve been feeling low lately 🥺❤️<br><br>"+
+
+ "I wish I could be there with you right now… but even from far, I’m always with you 😌✨<br><br>"+
+
+ "You don’t have to be strong every day. I’m proud of you 💞<br><br>"+
+
+ "No matter what, you have me. Always 🤗💖";
+}
+
+</script>
+
+</body>
+</html>
+
+
+
+
+
